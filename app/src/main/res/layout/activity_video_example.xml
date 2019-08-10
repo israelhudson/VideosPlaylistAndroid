@@ -5,11 +5,12 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity">
+        tools:context=".VideoExampleActivity">
 
-    <com.google.android.exoplayer2.ui.PlayerView
-            android:id="@+id/ep_video_view"
+    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:id="@+id/exo_player_view">
+    </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
 
 </RelativeLayout>
