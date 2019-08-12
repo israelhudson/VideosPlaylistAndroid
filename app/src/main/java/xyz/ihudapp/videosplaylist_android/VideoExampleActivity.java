@@ -26,7 +26,8 @@ public class VideoExampleActivity extends AppCompatActivity {
 
     SimpleExoPlayerView exoPlayerView;
     SimpleExoPlayer exoPlayer;
-    String videoURL = "http://blueappsoftware.in/layout_design_android_blog.mp4";
+    //String videoURL = "http://blueappsoftware.in/layout_design_android_blog.mp4";
+    String videoURL = "https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
