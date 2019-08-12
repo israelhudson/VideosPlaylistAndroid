@@ -45,6 +45,7 @@ public class VideoExampleActivity extends AppCompatActivity implements Player.Ev
         setTitle(String.valueOf(currentVideo));
 
         videoUrls = new ArrayList();
+        videoUrls.add("https://onedrive.live.com/download?cid=A82DFC6ED9776AF4&resid=A82DFC6ED9776AF4%212082&authkey=AMCIqSB8zNNJvxM");
         videoUrls.add("https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4");
         videoUrls.add("https://www.w3schools.com/html/mov_bbb.mp4");
         videoUrls.add("https://www.demonuts.com/Demonuts/smallvideo.mp4");
@@ -56,14 +57,13 @@ public class VideoExampleActivity extends AppCompatActivity implements Player.Ev
             BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
             TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(bandwidthMeter));
             exoPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector);
-            DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory("exoplayer_video");
             ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
             exoPlayerView.setPlayer(exoPlayer);
 
             MediaSource[] mediaSources = new MediaSource[videoUrls.size()];
 
             for (int i = 0; i < videoUrls.size(); i++) {
-                mediaSources[i] = new ExtractorMediaSource(Uri.parse(videoUrls.get(i)), dataSourceFactory, extractorsFactory, null, null);
+                mediaSources[i] = new ExtractorMediaSource(Uri.parse(videoUrls.get(i)), new CacheDataSourceFactory(this, 100 * 1024 * 1024, 5 * 1024 * 1024), extractorsFactory, null, null);
             }
 
             MediaSource mediaSource = mediaSources.length == 1 ? mediaSources[0]
