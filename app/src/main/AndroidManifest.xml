@@ -14,7 +14,8 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <activity android:name=".video_player.VideoExampleActivity"
-                  android:screenOrientation="landscape">
+                  android:screenOrientation="landscape"
+                    android:theme="@style/AppTheme.PlayerVideo">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
