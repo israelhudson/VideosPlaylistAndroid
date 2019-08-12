@@ -20,6 +20,9 @@ import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class VideoExampleActivity extends AppCompatActivity {
 
     SimpleExoPlayerView exoPlayerView;
@@ -28,10 +31,16 @@ public class VideoExampleActivity extends AppCompatActivity {
     String videoURL = "https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4";
     DynamicConcatenatingMediaSource dynamicConcatenatingMediaSource;
 
+    List videoUrls;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_example);
+
+        videoUrls = new ArrayList();
+        videoUrls.add("https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4");
+        videoUrls.add("https://www.w3schools.com/html/mov_bbb.mp4");
 
         dynamicConcatenatingMediaSource = new DynamicConcatenatingMediaSource();
 
@@ -44,16 +53,14 @@ public class VideoExampleActivity extends AppCompatActivity {
             Uri videoURI = Uri.parse(videoURL);
             DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory("exoplayer_video");
             ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-            MediaSource mediaSource1 = new ExtractorMediaSource(videoURI, dataSourceFactory, extractorsFactory, null, null);
-            MediaSource mediaSource2 = new ExtractorMediaSource(videoURI, dataSourceFactory, extractorsFactory, null, null);
+            MediaSource mediaSource1 = new ExtractorMediaSource(Uri.parse(videoUrls.get(0).toString()), dataSourceFactory, extractorsFactory, null, null);
+            MediaSource mediaSource2 = new ExtractorMediaSource(Uri.parse(videoUrls.get(1).toString()), dataSourceFactory, extractorsFactory, null, null);
             exoPlayerView.setPlayer(exoPlayer);
 
 
             dynamicConcatenatingMediaSource.addMediaSource(mediaSource1);
             dynamicConcatenatingMediaSource.addMediaSource(mediaSource2);
             exoPlayer.prepare(dynamicConcatenatingMediaSource);
-            //exoPlayer.prepare(mediaSource);
-            //exoPlayer.seekTo(3, C.TIME_UNSET);
 
             exoPlayer.setPlayWhenReady(true);
             exoPlayer.setRepeatMode(exoPlayer.REPEAT_MODE_ALL);
