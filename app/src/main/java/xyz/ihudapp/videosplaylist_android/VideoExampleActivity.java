@@ -8,6 +8,7 @@ import android.view.View;
 import com.google.android.exoplayer2.*;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
+import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.DynamicConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
@@ -31,7 +32,7 @@ public class VideoExampleActivity extends AppCompatActivity {
     String videoURL = "https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4";
     DynamicConcatenatingMediaSource dynamicConcatenatingMediaSource;
 
-    List videoUrls;
+    List<String> videoUrls;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,26 +43,27 @@ public class VideoExampleActivity extends AppCompatActivity {
         videoUrls.add("https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4");
         videoUrls.add("https://www.w3schools.com/html/mov_bbb.mp4");
 
-        dynamicConcatenatingMediaSource = new DynamicConcatenatingMediaSource();
-
-        exoPlayerView = (SimpleExoPlayerView) findViewById(R.id.exo_player_view);
+        exoPlayerView = findViewById(R.id.exo_player_view);
 
         try {
+            dynamicConcatenatingMediaSource = new DynamicConcatenatingMediaSource();
             BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
             TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(bandwidthMeter));
             exoPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector);
-            Uri videoURI = Uri.parse(videoURL);
             DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory("exoplayer_video");
             ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-            MediaSource mediaSource1 = new ExtractorMediaSource(Uri.parse(videoUrls.get(0).toString()), dataSourceFactory, extractorsFactory, null, null);
-            MediaSource mediaSource2 = new ExtractorMediaSource(Uri.parse(videoUrls.get(1).toString()), dataSourceFactory, extractorsFactory, null, null);
             exoPlayerView.setPlayer(exoPlayer);
 
+            MediaSource[] mediaSources = new MediaSource[videoUrls.size()];
 
-            dynamicConcatenatingMediaSource.addMediaSource(mediaSource1);
-            dynamicConcatenatingMediaSource.addMediaSource(mediaSource2);
-            exoPlayer.prepare(dynamicConcatenatingMediaSource);
+            for (int i = 0; i < videoUrls.size(); i++) {
+                mediaSources[i] = new ExtractorMediaSource(Uri.parse(videoUrls.get(i)), dataSourceFactory, extractorsFactory, null, null);
+            }
 
+            MediaSource mediaSource = mediaSources.length == 1 ? mediaSources[0]
+                    : new ConcatenatingMediaSource(mediaSources);
+
+            exoPlayer.prepare(mediaSource);
             exoPlayer.setPlayWhenReady(true);
             exoPlayer.setRepeatMode(exoPlayer.REPEAT_MODE_ALL);
         }catch (Exception e){
